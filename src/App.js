@@ -49,13 +49,13 @@ const App = () => {
                     />
                 </div>
 
-                <div id="translate-column" className="col-sm-6 overflow-scroll">
+                <div id="translate-column" className="col-sm-6">
                     {shownSubtitles.map((subtitle) => (
                         <SubtitleItem key={subtitle.text} ids={subtitle.ids} text={subtitle.text} callback={handleTextChanged} />
                     ))}
                 </div>
 
-                <div id="srt-column" className="col-sm-3 overflow-scroll">
+                <div id="srt-column" className="col-sm-3">
                     <code>{formattedSubtitles}</code>
                 </div>
             </div>
