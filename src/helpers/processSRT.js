@@ -30,6 +30,24 @@ export function uniqueSubtitles(subtitles) {
     return parsedSubtitles;
 }
 
+// reintegrate subtitles from array of unique subtitles, and the original subtitles
+export function reintegrateSubtitles(originals, subtitles) {
+    if (subtitles.length > 0) {
+        let reintegratedSubtitles = [];
+        for (let original of originals) {
+            reintegratedSubtitles.push({
+                id: original.id,
+                times: original.times,
+                text: subtitles.find(x => x.ids.includes(original.id)).text
+            })
+        }
+        return reintegratedSubtitles;
+    } else {
+        return originals;
+    }
+}
+
+// create formatted SRT from array of subtitle objects
 export function createSRT(subtitles) {
     let output = "";
     for (let subtitle of subtitles) {

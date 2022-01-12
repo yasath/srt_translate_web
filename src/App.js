@@ -1,13 +1,14 @@
 import { useState } from "react";
 import SubtitleItem from "./components/SubtitleItem";
-import { splitSubtitles, uniqueSubtitles, createSRT } from "./helpers/processSRT";
+import { splitSubtitles, uniqueSubtitles, reintegrateSubtitles, createSRT } from "./helpers/processSRT";
 import "./App.css";
 
 const App = () => {
     let fileReader;
-    const [originalSubtitles, setOriginalSubtitles] = useState([])
-    const [shownSubtitles, setShownSubtitles] = useState([])
-    const [finalSubtitles, setFinalSubtitles] = useState([])
+    const [originalSubtitles, setOriginalSubtitles] = useState([]);
+    const [shownSubtitles, setShownSubtitles] = useState([]);
+    const [finalSubtitles, setFinalSubtitles] = useState([]);
+    const [formattedSubtitles, setFormattedSubtitles] = useState("");
 
     const handleFileRead = (e) => {
         let loadedSubtitles = fileReader.result
@@ -18,8 +19,9 @@ const App = () => {
 
         let parsedSubtitles = splitSubtitles(loadedSubtitles);
         setOriginalSubtitles(parsedSubtitles);
-        setFinalSubtitles(parsedSubtitles);
         setShownSubtitles(uniqueSubtitles(parsedSubtitles));
+        setFinalSubtitles(uniqueSubtitles(parsedSubtitles));
+        setFormattedSubtitles("Start editing to see a live preview here!");
     };
 
     const handleFileChosen = (file) => {
@@ -27,6 +29,11 @@ const App = () => {
         fileReader.onloadend = handleFileRead;
         fileReader.readAsText(file);
     };
+
+    const handleTextChanged = (ids, text) => {
+        finalSubtitles.find(x => JSON.stringify(x.ids) === JSON.stringify(ids)).text = text;
+        setFormattedSubtitles(createSRT(reintegrateSubtitles(originalSubtitles, finalSubtitles)))
+    }
 
     return (
         <div className="p-4">
@@ -44,12 +51,12 @@ const App = () => {
 
                 <div id="translate-column" className="col-sm-6 overflow-scroll">
                     {shownSubtitles.map((subtitle) => (
-                        <SubtitleItem key={subtitle.text} ids={subtitle.ids} text={subtitle.text} />
+                        <SubtitleItem key={subtitle.text} ids={subtitle.ids} text={subtitle.text} callback={handleTextChanged} />
                     ))}
                 </div>
 
                 <div id="srt-column" className="col-sm-3 overflow-scroll">
-                    <code>{createSRT(finalSubtitles)}</code>
+                    <code>{formattedSubtitles}</code>
                 </div>
             </div>
         </div>

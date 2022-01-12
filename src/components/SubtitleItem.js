@@ -1,4 +1,4 @@
-const SubtitleItem = ({ ids, text }) => {
+const SubtitleItem = ({ ids, text, callback }) => {
     return (
         <>
             <div className="row align-items-center pb-2">
@@ -8,6 +8,7 @@ const SubtitleItem = ({ ids, text }) => {
                 </div>
                 <div className="col">
                     <textarea
+                        onInput={e => callback(ids, e.target.value)}
                         className="form-control" rows="2"
                         placeholder={"Translate '" + text + "'"}></textarea>
                 </div>
