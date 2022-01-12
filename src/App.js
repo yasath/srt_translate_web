@@ -40,7 +40,7 @@ const App = () => {
                 </div>
                 <div className="col-lg-8">
                     {shownSubtitles.map((subtitle) => (
-                        <SubtitleItem key={subtitle.text} text={subtitle.text} />
+                        <SubtitleItem key={subtitle.text} ids={subtitle.ids} text={subtitle.text} />
                     ))}
                 </div>
             </div>

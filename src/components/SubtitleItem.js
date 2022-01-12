@@ -1,6 +1,18 @@
-const SubtitleItem = ({ text }) => {
+const SubtitleItem = ({ ids, text }) => {
     return (
-        <p>{text}</p>
+        <>
+            <div className="row align-items-center pb-2">
+                <div className="col">
+                    <small className="text-muted">{ids.join(", ")}</small>
+                    <p>{text}</p>
+                </div>
+                <div className="col">
+                    <textarea
+                        className="form-control" rows="2"
+                        placeholder={"Translate '" + text + "'"}></textarea>
+                </div>
+            </div>
+        </>
     )
 }
 
