@@ -8,6 +8,7 @@ const START_EDITING_MESSAGE = "Start editing to see a live preview here!";
 
 const App = () => {
     let fileReader;
+    const [fileName, setFileName] = useState("");
     const [originalSubtitles, setOriginalSubtitles] = useState([]);
     const [shownSubtitles, setShownSubtitles] = useState([]);
     const [finalSubtitles, setFinalSubtitles] = useState([]);
@@ -28,6 +29,7 @@ const App = () => {
     };
 
     const handleFileChosen = (file) => {
+        setFileName(file.name);
         fileReader = new FileReader();
         fileReader.onloadend = handleFileRead;
         fileReader.readAsText(file);
@@ -39,7 +41,13 @@ const App = () => {
     }
 
     const saveSRT = (event) => {
-        alert("saved");
+        const a = document.createElement("a");
+        const file = new Blob([createSRT(reintegrateSubtitles(originalSubtitles, finalSubtitles))], { type: "text/plain" });
+        a.href = URL.createObjectURL(file);
+        // this regex removes the file extension
+        a.download = fileName.replace(/\.[^/.]+$/, "") + "_translated.srt";
+        a.click();
+        URL.revokeObjectURL(a.href);
     }
 
     return (
