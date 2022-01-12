@@ -16,16 +16,22 @@ const App = () => {
     };
 
     return (
-        <div className="container">
-            <h1>srt_translate_web</h1>
+        <div className="container p-4">
+            <div className="row align-items-start">
+                <div className="col-lg-4">
+                    <h2>srt_translate_web</h2>
 
-            <input
-                type="file"
-                accept=".srt"
-                onChange={e => handleFileChosen(e.target.files[0])}
-            />
-
-            <p>{loadedSubtitles}</p>
+                    <input
+                        className="form-control"
+                        type="file"
+                        accept=".srt"
+                        onChange={e => handleFileChosen(e.target.files[0])}
+                    />
+                </div>
+                <div className="col-lg-8">
+                    <p>{loadedSubtitles}</p>
+                </div>
+            </div>
         </div>
     )
 }
