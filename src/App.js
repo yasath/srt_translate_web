@@ -1,7 +1,10 @@
 import { useState } from "react";
 import SubtitleItem from "./components/SubtitleItem";
 import { splitSubtitles, uniqueSubtitles, reintegrateSubtitles, createSRT } from "./helpers/processSRT";
+import { FiDownload } from "react-icons/fi";
 import "./App.css";
+
+const START_EDITING_MESSAGE = "Start editing to see a live preview here!";
 
 const App = () => {
     let fileReader;
@@ -10,7 +13,7 @@ const App = () => {
     const [finalSubtitles, setFinalSubtitles] = useState([]);
     const [formattedSubtitles, setFormattedSubtitles] = useState("");
 
-    const handleFileRead = (e) => {
+    const handleFileRead = (event) => {
         let loadedSubtitles = fileReader.result
             // remove any blank lines
             .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")
@@ -21,7 +24,7 @@ const App = () => {
         setOriginalSubtitles(parsedSubtitles);
         setShownSubtitles(uniqueSubtitles(parsedSubtitles));
         setFinalSubtitles(uniqueSubtitles(parsedSubtitles));
-        setFormattedSubtitles("Start editing to see a live preview here!");
+        setFormattedSubtitles(START_EDITING_MESSAGE);
     };
 
     const handleFileChosen = (file) => {
@@ -33,6 +36,10 @@ const App = () => {
     const handleTextChanged = (ids, text) => {
         finalSubtitles.find(x => JSON.stringify(x.ids) === JSON.stringify(ids)).text = text;
         setFormattedSubtitles(createSRT(reintegrateSubtitles(originalSubtitles, finalSubtitles)))
+    }
+
+    const saveSRT = (event) => {
+        alert("saved");
     }
 
     return (
@@ -56,6 +63,8 @@ const App = () => {
                 </div>
 
                 <div id="srt-column" className="col-sm-3">
+                    {formattedSubtitles === START_EDITING_MESSAGE || formattedSubtitles !== "" &&
+                        <button id="download-button" type="button" class="btn btn-outline-dark" onClick={saveSRT}><FiDownload /></button>}
                     <code>{formattedSubtitles}</code>
                 </div>
             </div>

@@ -2,6 +2,10 @@
     white-space: pre-wrap;
 }
 
+#download-button {
+    float: right;
+}
+
 @media screen and (min-width: 992px) {
     #translate-column, #srt-column {
         max-height: calc(100vh - 3rem);
