@@ -29,3 +29,13 @@ export function uniqueSubtitles(subtitles) {
     }
     return parsedSubtitles;
 }
+
+export function createSRT(subtitles) {
+    let output = "";
+    for (let subtitle of subtitles) {
+        output += subtitle.id.toString() + "\n";
+        output += subtitle.times + "\n";
+        output += subtitle.text + "\n\n";
+    }
+    return output;
+}
