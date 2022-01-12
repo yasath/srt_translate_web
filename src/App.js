@@ -1,12 +1,22 @@
 import { useState } from "react";
+import SubtitleItem from "./components/SubtitleItem";
+import { splitSubtitles, uniqueSubtitles } from "./helpers/processSRT";
 
 const App = () => {
     let fileReader;
-    const [loadedSubtitles, setLoadedSubtitles] = useState("")
+    const [originalSubtitles, setOriginalSubtitles] = useState([])
+    const [shownSubtitles, setShownSubtitles] = useState([])
 
     const handleFileRead = (e) => {
-        const content = fileReader.result;
-        setLoadedSubtitles(content);
+        let loadedSubtitles = fileReader.result
+            // remove any blank lines
+            .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")
+            // split every third line
+            .match(/(?=[\s\S])(?:.*\n?){1,3}/g);
+
+        let parsedSubtitles = splitSubtitles(loadedSubtitles);
+        setOriginalSubtitles(parsedSubtitles);
+        setShownSubtitles(uniqueSubtitles(parsedSubtitles));
     };
 
     const handleFileChosen = (file) => {
@@ -29,7 +39,9 @@ const App = () => {
                     />
                 </div>
                 <div className="col-lg-8">
-                    <p>{loadedSubtitles}</p>
+                    {shownSubtitles.map((subtitle) => (
+                        <SubtitleItem key={subtitle.text} text={subtitle.text} />
+                    ))}
                 </div>
             </div>
         </div>
