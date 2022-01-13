@@ -16,6 +16,7 @@ const App = () => {
 
     const loadExampleSRT = (event) => {
         setInitialStates(exampleSRT);
+        setFileName("example");
         fileInput.current.value = null;
     }
 
