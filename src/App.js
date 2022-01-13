@@ -69,7 +69,7 @@ const App = () => {
 
                 <div id="srt-column" className="col-sm-3">
                     {formattedSubtitles !== "" &&
-                        <button id="download-button" type="button" class="btn btn-outline-dark" onClick={saveSRT}><FiDownload /></button>}
+                        <button id="download-button" type="button" className="btn btn-outline-dark" onClick={saveSRT}><FiDownload /></button>}
                     <code>{formattedSubtitles}</code>
                 </div>
             </div>
