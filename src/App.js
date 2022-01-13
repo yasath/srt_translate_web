@@ -4,8 +4,6 @@ import { splitSubtitles, uniqueSubtitles, reintegrateSubtitles, createSRT } from
 import { FiDownload } from "react-icons/fi";
 import "./App.css";
 
-const START_EDITING_MESSAGE = "Start editing to see a live preview here!";
-
 const App = () => {
     let fileReader;
     const [fileName, setFileName] = useState("");
@@ -20,12 +18,11 @@ const App = () => {
             .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")
             // split every third line
             .match(/(?=[\s\S])(?:.*\n?){1,3}/g);
-
+        setFormattedSubtitles(fileReader.result);
         let parsedSubtitles = splitSubtitles(loadedSubtitles);
         setOriginalSubtitles(parsedSubtitles);
         setShownSubtitles(uniqueSubtitles(parsedSubtitles));
         setFinalSubtitles(uniqueSubtitles(parsedSubtitles));
-        setFormattedSubtitles(START_EDITING_MESSAGE);
     };
 
     const handleFileChosen = (file) => {
@@ -71,7 +68,7 @@ const App = () => {
                 </div>
 
                 <div id="srt-column" className="col-sm-3">
-                    {formattedSubtitles === START_EDITING_MESSAGE || formattedSubtitles !== "" &&
+                    {formattedSubtitles !== "" &&
                         <button id="download-button" type="button" class="btn btn-outline-dark" onClick={saveSRT}><FiDownload /></button>}
                     <code>{formattedSubtitles}</code>
                 </div>
