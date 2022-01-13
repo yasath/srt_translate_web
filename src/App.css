@@ -6,6 +6,10 @@
     float: right;
 }
 
+.link-primary:hover {
+    cursor: pointer;
+}
+
 @media screen and (min-width: 992px) {
     #translate-column, #srt-column {
         max-height: calc(100vh - 3rem);

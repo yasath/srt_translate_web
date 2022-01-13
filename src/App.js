@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import SubtitleItem from "./components/SubtitleItem";
 import { splitSubtitles, uniqueSubtitles, reintegrateSubtitles, createSRT } from "./helpers/processSRT";
+import { exampleSRT } from "./helpers/exampleSRT";
 import { FiDownload } from "react-icons/fi";
 import "./App.css";
 
@@ -11,19 +12,29 @@ const App = () => {
     const [shownSubtitles, setShownSubtitles] = useState([]);
     const [finalSubtitles, setFinalSubtitles] = useState([]);
     const [formattedSubtitles, setFormattedSubtitles] = useState("");
+    const fileInput = useRef(null);
+
+    const loadExampleSRT = (event) => {
+        setInitialStates(exampleSRT);
+        fileInput.current.value = null;
+    }
 
     const handleFileRead = (event) => {
-        let loadedSubtitles = fileReader.result
+        setInitialStates(fileReader.result);
+    };
+
+    const setInitialStates = (file) => {
+        let loadedSubtitles = file
             // remove any blank lines
             .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")
             // split every third line
             .match(/(?=[\s\S])(?:.*\n?){1,3}/g);
-        setFormattedSubtitles(fileReader.result);
+        setFormattedSubtitles(file);
         let parsedSubtitles = splitSubtitles(loadedSubtitles);
         setOriginalSubtitles(parsedSubtitles);
         setShownSubtitles(uniqueSubtitles(parsedSubtitles));
         setFinalSubtitles(uniqueSubtitles(parsedSubtitles));
-    };
+    }
 
     const handleFileChosen = (file) => {
         setFileName(file.name);
@@ -54,11 +65,14 @@ const App = () => {
                     <h2>srt_translate_web</h2>
 
                     <input
-                        className="form-control"
+                        className="form-control mb-2"
+                        ref={fileInput}
                         type="file"
                         accept=".srt"
                         onChange={e => handleFileChosen(e.target.files[0])}
                     />
+
+                    <p className="text-muted">Or, <span className="link-primary" onClick={loadExampleSRT}>use an example file</span>.</p>
                 </div>
 
                 <div id="translate-column" className="col-sm-6">
